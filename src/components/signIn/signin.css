@@ -1,0 +1,121 @@
+.App {
+  /* text-align: center; */
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.MuiFormHelperText-root {
+  color: red !important;
+}
+
+button#loginBtn:hover {
+  background-color: #2d4770 !important;
+}
+button#loginBtn {
+  color: #fff !important;
+}
+
+a#signUp {
+  display: inline-block;
+  position: relative;
+  color: #2d4770;
+}
+
+a#signUp:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #2d4770;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+a#signUp:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.title {
+  margin-top: 23% !important;
+  text-align: center;
+  color: #2d4770;
+}
+.subtitle {
+  text-align: center;
+  font-weight: 400;
+}
+.wave {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 50%;
+  z-index: -1;
+}
+/* .bg-login {
+  background-image: url("../../images/bgLogin.PNG");
+  background-size: contain;
+  background-position: center;
+} */
+.forget-pass {
+  color: #3c76d2 !important;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem !important;
+  text-decoration: none !important;
+}
+.forget-pass:hover {
+  opacity: 0.7;
+}
+.bg-img {
+  width: 100%;
+}
+/* .MuiGrid-container {
+  height: 100% !important;
+} */
+@media screen and (max-width: 768px) {
+  .wave {
+    display: none;
+  }
+  .title {
+    margin-top: 18% !important;
+  }
+  /* .bg-img {
+    width: 100%;
+  } */
+}
