@@ -1,26 +1,25 @@
-import ReactDOM from "react-dom/client";
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/navbar/screen2a";
-import Signin from "./components/signIn/signin";
-import SimpleDialogDemo from "./components/tableTwo/modal";
+import { Navbar, MainTables, Login } from "./components";
 
-export default function App() {
+function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Signin />} />
-        <Route
-          path="/table"
-          element={
-            <>
-              <Navbar /> <SimpleDialogDemo />
-            </>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route
+            path="/table"
+            element={
+              <>
+                <Navbar /> <MainTables />
+              </>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+export default App;

@@ -7,7 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#1976d2",
+  backgroundColor: "#8905ff",
   color: "#fff",
   marginLeft: 0,
   padding: "0.1rem",
@@ -39,9 +39,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: "100%",
     [theme.breakpoints.up("sm")]: {
       width: "100%",
-      "&:focus": {
-        width: "20ch",
-      },
     },
   },
 }));

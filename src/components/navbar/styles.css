@@ -1,0 +1,57 @@
+input[type="file"]::-webkit-file-upload-button {
+  background-color: #ebe2e2;
+  height: 100%;
+  float: right;
+  border: none;
+  color: #545454;
+  font-size: 1em !important;
+  cursor: pointer;
+  border-radius: 0% !important;
+}
+
+.swal2-input {
+  width: 70% !important;
+  margin-right: auto;
+  margin-left: auto;
+  background: 0 0;
+  font-size: 0.925em !important;
+  cursor: pointer;
+  border-radius: 0% !important;
+  padding: 10px 12px !important;
+}
+
+.swal2-confirm {
+  border: 0;
+  border-radius: 0% !important;
+  border-radius: 0.25em;
+  background: initial;
+  background-color: #1c9476 !important;
+  color: #fff;
+  font-size: 1em;
+}
+
+.swal2-cancel {
+  border: 0;
+  border-radius: 0% !important;
+  border-radius: 0.25em;
+  background: initial;
+  background-color: #212a4a !important;
+  color: #fff;
+  font-size: 1em;
+}
+.swal2-cancel:hover {
+  background-color: #8905ff !important;
+}
+
+.swal2-confirm:hover {
+  background-color: #08d36d !important;
+}
+
+@media screen and (max-width: 339px) {
+  input[type="file"]::-webkit-file-upload-button {
+    display: none;
+  }
+  .swal2-input {
+    width: 60% !important;
+  }
+}

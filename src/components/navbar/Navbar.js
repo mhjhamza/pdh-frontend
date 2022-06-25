@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-// import InputBase from "@mui/material/InputBase";
+import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
@@ -14,19 +14,62 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { NavLink } from "react-bootstrap";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import Link from "@mui/material/Link";
 import Swal from "sweetalert2";
 import EmailCsv from "../../images/email.csv";
-import { CleaningServices } from "@mui/icons-material";
+import "./styles.css";
+
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(3),
+    width: "auto",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(2)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
+  },
+}));
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const [click, setClick] = React.useState(false);
-  const [dropdown, setDropdown] = useState(false);
-  const presigned = useRef();
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const open = Boolean(anchorEl);
+
+  const presigned = useRef();
   const baseURl = "https://n4dmctglka.execute-api.us-east-2.amazonaws.com/api";
 
   const handlefetchRecord = useCallback(async (path) => {
@@ -73,7 +116,7 @@ export default function PrimarySearchAppBar() {
     // post the data on the s3 url
     await fetch(presigned?.current?.url, requestOptions)
       .then(function (response) {
-        setDropdown(false);
+        // setDropdown(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -86,16 +129,14 @@ export default function PrimarySearchAppBar() {
       title: "Choose a file...",
       html: `<input type="file" id="file" accept=".csv"   class="swal2-input">`,
       preConfirm: () => {
-        const file = Swal.getPopup().querySelector("#file").files[0].name;
-        const fileObject = Swal.getPopup().querySelector("#file").files[0]
-        console.log('Helloworld', typeof file)
-        let checkCsvExtension = file.split(".")[1] == ".csv";
-        setDropdown(false);
-        if (checkCsvExtension) {
+        const file = Swal.getPopup().querySelector("#file").value;
+        let checkCsvExtension = file.split(".")[1] === "csv";
+        // setDropdown(false);
+        if (!checkCsvExtension) {
           Swal.showValidationMessage(`Please select csv file !`);
         }
-        if (!checkCsvExtension) {
-          uploadFileToS3(fileObject);
+        if (checkCsvExtension) {
+          uploadFileToS3(file);
         }
         if (!file) {
           Swal.showValidationMessage(`Please be sure to choose a file !`);
@@ -115,12 +156,12 @@ export default function PrimarySearchAppBar() {
     });
   };
 
-  const handleClick = () => setClick(!click);
-  const Close = () => setClick(false);
-  const clickDrop = () => setDropdown(!dropdown);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -139,28 +180,6 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
-
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -178,38 +197,8 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      <MenuItem onClick={() => handle("optum")}>Optum</MenuItem>
+      <MenuItem onClick={() => handle("emr")}>EMR</MenuItem>
     </Menu>
   );
   const styles = {
@@ -219,7 +208,7 @@ export default function PrimarySearchAppBar() {
     },
   };
   return (
-    <Box sx={{ flexGrow: 1 }} onClick={() => Close()}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ minHeight: "80px", p: 0 }}>
         <Container>
           <Toolbar sx={styles}>
@@ -227,57 +216,48 @@ export default function PrimarySearchAppBar() {
               variant="h6"
               noWrap
               component="div"
-              sx={{ display: { xs: "none", sm: "block", fontSize: "1.5rem" } }}
+              sx={{ display: { sm: "block", fontSize: "1.5rem" } }}
             >
-              {/* <NavLink exact to="/"  > */}
-              ParaDocs Health
-              {/* </NavLink> */}
+              <Link href="#" underline="none" sx={{ color: "#fff" }}>
+                ParaDocs Health
+              </Link>
             </Typography>
 
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Typography variant="body1" sx={{ mx: 2 }}>
-                <a
-                  class="nav-link dropdown-toggle"
-                  id="navbarDropdownMenuLink"
-                  onClick={clickDrop}
-                  href="#"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
+              <Typography variant="body1">Upload</Typography>
+              <>
+                <KeyboardArrowDownIcon
+                  onClick={handleClick}
+                  color="inherit"
+                  sx={{ mx: 1 }}
+                />
+                <Menu
+                  id="demo-positioned-menu"
+                  aria-labelledby="demo-positioned-button"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "right",
+                    horizontal: "bottom",
+                  }}
                 >
-                  Upload
-                </a>
-                <div
-                  class={dropdown ? "dropdown-menu " : "dropMenu"}
-                  aria-labelledby="navbarDropdownMenuLink"
-                >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    onClick={() => handle("optum")}
-                  >
-                    Optum
-                  </a>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    onClick={() => handle("emr")}
-                  >
-                    EMR
-                  </a>
-                </div>
-              </Typography>
+                  <MenuItem onClick={() => handle("optum")}>Optum</MenuItem>
+                  <MenuItem onClick={() => handle("emr")}>EMR</MenuItem>
+                </Menu>
+              </>
+            </Box>
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
               <Typography variant="body1">
                 {" "}
-                <NavLink
-                  exact
-                  activeClassName="active"
-                  className="nav-links"
-                  onClick={click ? handleClick : null}
-                >
+                <Link href="#" underline="none" sx={{ color: "#fff" }}>
                   Welcome Muhammad !
-                </NavLink>
+                </Link>
               </Typography>
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -296,7 +276,6 @@ export default function PrimarySearchAppBar() {
         </Container>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
 }

@@ -1,0 +1,6 @@
+.orderTab-container {
+  background-color: var(--lightBlack);
+  display: flex;
+  justify-content: center;
+  height: 50px;
+}
