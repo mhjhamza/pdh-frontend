@@ -133,7 +133,7 @@ export default function PrimarySearchAppBar() {
         const fileObject = Swal.getPopup().querySelector("#file").files[0]
         console.log('Helloworld', typeof file)
         let checkCsvExtension = file.split(".")[1] == ".csv";
-        setDropdown(false);
+        // setDropdown(false);
         if (checkCsvExtension) {
           Swal.showValidationMessage(`Please select csv file !`);
         }
