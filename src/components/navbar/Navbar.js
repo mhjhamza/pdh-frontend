@@ -129,14 +129,16 @@ export default function PrimarySearchAppBar() {
       title: "Choose a file...",
       html: `<input type="file" id="file" accept=".csv"   class="swal2-input">`,
       preConfirm: () => {
-        const file = Swal.getPopup().querySelector("#file").value;
-        let checkCsvExtension = file.split(".")[1] === "csv";
-        // setDropdown(false);
-        if (!checkCsvExtension) {
+        const file = Swal.getPopup().querySelector("#file").files[0].name;
+        const fileObject = Swal.getPopup().querySelector("#file").files[0]
+        console.log('Helloworld', typeof file)
+        let checkCsvExtension = file.split(".")[1] == ".csv";
+        setDropdown(false);
+        if (checkCsvExtension) {
           Swal.showValidationMessage(`Please select csv file !`);
         }
-        if (checkCsvExtension) {
-          uploadFileToS3(file);
+        if (!checkCsvExtension) {
+          uploadFileToS3(fileObject);
         }
         if (!file) {
           Swal.showValidationMessage(`Please be sure to choose a file !`);
